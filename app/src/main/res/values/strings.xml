@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Crypto Tracker</string>
+    <string name="topCoins">Top Coins</string>
+    <string name="favorites">Favorites</string>
+</resources>
