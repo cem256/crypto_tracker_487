@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemavci.project.R;
 import com.cemavci.project.adapters.FavoritesRecyclerItemAdapter;
+import com.cemavci.project.database.DatabaseHelper;
 
 
 public class FavoritesFragment extends Fragment {
@@ -38,9 +39,14 @@ public class FavoritesFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.favoritesRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext());
+        recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext(), DatabaseHelper.favoritesArrayList);
         recyclerView.setAdapter(recyclerItemAdapter);
+    }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext(), DatabaseHelper.favoritesArrayList);
+        recyclerView.setAdapter(recyclerItemAdapter);
     }
 }

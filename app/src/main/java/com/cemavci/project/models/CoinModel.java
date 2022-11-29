@@ -3,17 +3,21 @@ package com.cemavci.project.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class CoinModel implements Parcelable {
 
-    @SerializedName("symbol")
+    @Nullable
     private final String symbol;
-    @SerializedName("name")
+    @Nullable
     private final String name;
     @SerializedName("image")
+    @Nullable
     private final String imageUrl;
     @SerializedName("current_price")
+    @Nullable
     private final double currentPrice;
 
     public CoinModel(String symbol, String name, String imageUrl, double currentPrice) {

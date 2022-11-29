@@ -1,6 +1,7 @@
 package com.cemavci.project.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,12 @@ import java.util.ArrayList;
 public class FavoritesRecyclerItemAdapter extends RecyclerView.Adapter<FavoritesRecyclerItemAdapter.FavoritesRecyclerItemHolder> {
 
     private Context context;
-    private ArrayList<CoinModel> favoritesArrayList = new ArrayList<>();
+    private ArrayList<CoinModel> favoritesArrayList;
 
 
-    public FavoritesRecyclerItemAdapter(Context context) {
+    public FavoritesRecyclerItemAdapter(Context context, ArrayList<CoinModel> favoritesArrayList) {
         this.context = context;
+        this.favoritesArrayList = favoritesArrayList;
     }
 
     @NonNull
@@ -38,12 +40,12 @@ public class FavoritesRecyclerItemAdapter extends RecyclerView.Adapter<Favorites
     @Override
     public void onBindViewHolder(@NonNull FavoritesRecyclerItemHolder holder, int position) {
 
+
         CoinModel coin = favoritesArrayList.get(position);
         holder.addFavoriteButton.setVisibility(View.GONE);
+        holder.coinPrice.setVisibility(View.GONE);
         holder.coinName.setText(coin.getName());
-        holder.coinPrice.setText("$" + coin.getCurrentPrice());
         Picasso.get().load(coin.getImageUrl()).into(holder.coinImageView);
-
     }
 
 

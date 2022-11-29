@@ -3,6 +3,7 @@ package com.cemavci.project.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+// singleton retrofit instance for network requests
 public class RetrofitManager {
 
     private static Retrofit retrofit = null;

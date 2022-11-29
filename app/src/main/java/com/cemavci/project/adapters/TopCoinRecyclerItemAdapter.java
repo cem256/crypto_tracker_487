@@ -59,10 +59,9 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
             holder.addFavoriteButton.setColorFilter(Color.GRAY);
         }
 
-
-        holder.addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+        holder.addFavoriteButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 mediaPlayer = MediaPlayer.create(context, R.raw.click_sound);
                 mediaPlayer.start();
 
@@ -77,6 +76,7 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
                     holder.addFavoriteButton.setColorFilter(Color.YELLOW);
 
                 }
+                return false;
             }
         });
     }

@@ -29,6 +29,7 @@ import retrofit2.Retrofit;
 public class TopCoinsFragment extends Fragment {
 
     private CoinApi coinApi;
+    // holds the data coming from the api
     private ArrayList<CoinModel> coinModelArrayList;
     private RecyclerView recyclerView;
     private TopCoinRecyclerItemAdapter recyclerItemAdapter;
@@ -52,6 +53,7 @@ public class TopCoinsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.topCoinsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // sends the api request to the endpoint
         getTopCoins();
 
 
