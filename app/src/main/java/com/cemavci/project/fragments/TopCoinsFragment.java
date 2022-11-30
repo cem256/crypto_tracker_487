@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemavci.project.R;
 import com.cemavci.project.adapters.TopCoinRecyclerItemAdapter;
+import com.cemavci.project.database.DatabaseHelper;
 import com.cemavci.project.models.CoinModel;
 import com.cemavci.project.network.CoinApi;
 import com.cemavci.project.network.RetrofitManager;
@@ -31,6 +32,7 @@ public class TopCoinsFragment extends Fragment {
     private CoinApi coinApi;
     // holds the data coming from the api
     private ArrayList<CoinModel> coinModelArrayList;
+    private DatabaseHelper databaseHelper;
     private RecyclerView recyclerView;
     private TopCoinRecyclerItemAdapter recyclerItemAdapter;
 
@@ -53,6 +55,7 @@ public class TopCoinsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.topCoinsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        databaseHelper = new DatabaseHelper(getContext());
         // sends the api request to the endpoint
         getTopCoins();
 
@@ -69,6 +72,7 @@ public class TopCoinsFragment extends Fragment {
             public void onResponse(Call<ArrayList<CoinModel>> call, Response<ArrayList<CoinModel>> response) {
                 if (response.isSuccessful()) {
                     coinModelArrayList = response.body();
+                    databaseHelper.readFromDatabase();
                     recyclerItemAdapter = new TopCoinRecyclerItemAdapter(getContext(), coinModelArrayList);
                     recyclerView.setAdapter(recyclerItemAdapter);
                 }
