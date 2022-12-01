@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cemavci.project.R;
 import com.cemavci.project.adapters.TopCoinRecyclerItemAdapter;
 import com.cemavci.project.database.DatabaseHelper;
+import com.cemavci.project.database.FavoritesTable;
 import com.cemavci.project.models.CoinModel;
 import com.cemavci.project.network.CoinApi;
 import com.cemavci.project.network.RetrofitManager;
@@ -31,9 +33,12 @@ public class TopCoinsFragment extends Fragment {
 
     private CoinApi coinApi;
     // holds the data coming from the api
-    private ArrayList<CoinModel> coinModelArrayList;
+    private ArrayList<CoinModel> topCoinsArrayList;
+    // holds the favorites data
+    private ArrayList<CoinModel> favoritesArrayList;
     private DatabaseHelper databaseHelper;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     private TopCoinRecyclerItemAdapter recyclerItemAdapter;
 
     @Override
@@ -54,9 +59,11 @@ public class TopCoinsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.topCoinsRecycler);
+        progressBar = view.findViewById(R.id.topCoinsProgressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         databaseHelper = new DatabaseHelper(getContext());
         // sends the api request to the endpoint
+
         getTopCoins();
 
 
@@ -71,9 +78,11 @@ public class TopCoinsFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<CoinModel>> call, Response<ArrayList<CoinModel>> response) {
                 if (response.isSuccessful()) {
-                    coinModelArrayList = response.body();
-                    databaseHelper.readFromDatabase();
-                    recyclerItemAdapter = new TopCoinRecyclerItemAdapter(getContext(), coinModelArrayList);
+                    topCoinsArrayList = response.body();
+                    favoritesArrayList = FavoritesTable.getAllFavorites(databaseHelper);
+                    recyclerItemAdapter = new TopCoinRecyclerItemAdapter(getContext(), topCoinsArrayList,
+                            favoritesArrayList);
+                    progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(recyclerItemAdapter);
                 }
             }

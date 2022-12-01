@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cemavci.project.R;
 import com.cemavci.project.adapters.FavoritesRecyclerItemAdapter;
 import com.cemavci.project.database.DatabaseHelper;
+import com.cemavci.project.database.FavoritesTable;
+import com.cemavci.project.models.CoinModel;
+
+import java.util.ArrayList;
 
 
 public class FavoritesFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private TextView noFavoritesTextView;
     private FavoritesRecyclerItemAdapter recyclerItemAdapter;
+    private ArrayList<CoinModel> favoritesArrayList;
+    private DatabaseHelper databaseHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,15 +46,33 @@ public class FavoritesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.favoritesRecycler);
+        noFavoritesTextView = view.findViewById(R.id.noFavoritesTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext(), DatabaseHelper.favoritesArrayList);
-        recyclerView.setAdapter(recyclerItemAdapter);
+
+        databaseHelper = new DatabaseHelper(getContext());
+        favoritesArrayList = FavoritesTable.getAllFavorites(databaseHelper);
+
+        setView();
+
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext(), DatabaseHelper.favoritesArrayList);
-        recyclerView.setAdapter(recyclerItemAdapter);
+        favoritesArrayList = FavoritesTable.getAllFavorites(databaseHelper);
+        setView();
+    }
+
+    private void setView() {
+        if (favoritesArrayList.isEmpty()) {
+            noFavoritesTextView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            noFavoritesTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerItemAdapter = new FavoritesRecyclerItemAdapter(getContext(), favoritesArrayList);
+            recyclerView.setAdapter(recyclerItemAdapter);
+        }
     }
 }

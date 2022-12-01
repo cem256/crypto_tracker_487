@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemavci.project.R;
 import com.cemavci.project.database.DatabaseHelper;
+import com.cemavci.project.database.FavoritesTable;
 import com.cemavci.project.models.CoinModel;
 import com.squareup.picasso.Picasso;
 
@@ -24,14 +25,17 @@ import java.util.ArrayList;
 public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecyclerItemAdapter.TopCoinRecyclerItemHolder> {
 
     private Context context;
-    private ArrayList<CoinModel> coinModelArrayList;
+    private ArrayList<CoinModel> topCoinsArrayList;
+    private ArrayList<CoinModel> favoritesArrayList;
     private DatabaseHelper databaseHelper;
     private MediaPlayer mediaPlayer;
 
 
-    public TopCoinRecyclerItemAdapter(Context context, ArrayList<CoinModel> coinModelArrayList) {
+    public TopCoinRecyclerItemAdapter(Context context, ArrayList<CoinModel> topCoinsArrayList,
+                                      ArrayList<CoinModel> favoritesArrayList) {
         this.context = context;
-        this.coinModelArrayList = coinModelArrayList;
+        this.topCoinsArrayList = topCoinsArrayList;
+        this.favoritesArrayList = favoritesArrayList;
         this.databaseHelper = new DatabaseHelper(context);
     }
 
@@ -46,13 +50,13 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
     @Override
     public void onBindViewHolder(@NonNull TopCoinRecyclerItemHolder holder, int position) {
 
-        CoinModel coin = coinModelArrayList.get(position);
+        CoinModel coin = topCoinsArrayList.get(position);
         holder.coinName.setText(coin.getName());
         holder.coinPrice.setText("$" + coin.getCurrentPrice());
         Picasso.get().load(coin.getImageUrl()).into(holder.coinImageView);
 
 
-        if (isFavorite(coin.getSymbol(), DatabaseHelper.favoritesArrayList)) {
+        if (isFavorite(coin.getSymbol(), favoritesArrayList)) {
             holder.addFavoriteButton.setColorFilter(Color.YELLOW);
         } else {
             holder.addFavoriteButton.setColorFilter(Color.GRAY);
@@ -65,25 +69,18 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
                 mediaPlayer.start();
 
 
-                if (isFavorite(coin.getSymbol(), DatabaseHelper.favoritesArrayList)) {
-                    databaseHelper.removeFromFavorites(coin);
-                    databaseHelper.readFromDatabase();
+                if (isFavorite(coin.getSymbol(), favoritesArrayList)) {
+                    FavoritesTable.delete(databaseHelper, coin);
+                    Toast.makeText(context, coin.getName() + "is removed from favorites", Toast.LENGTH_SHORT).show();
                     holder.addFavoriteButton.setColorFilter(Color.GRAY);
                 } else {
-                    databaseHelper.addToFavorites(coin);
-                    databaseHelper.readFromDatabase();
+                    FavoritesTable.insert(databaseHelper, coin);
+                    Toast.makeText(context, coin.getName() + "is added to favorites", Toast.LENGTH_SHORT).show();
                     holder.addFavoriteButton.setColorFilter(Color.YELLOW);
 
                 }
+                favoritesArrayList = FavoritesTable.getAllFavorites(databaseHelper);
                 return false;
-            }
-        });
-
-        holder.addFavoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Please long press to add or remove items from favorites",
-                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -101,7 +98,7 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
 
     @Override
     public int getItemCount() {
-        return coinModelArrayList.size();
+        return topCoinsArrayList.size();
     }
 
     public static class TopCoinRecyclerItemHolder extends RecyclerView.ViewHolder {

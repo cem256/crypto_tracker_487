@@ -9,6 +9,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class CoinModel implements Parcelable {
 
+    public static final Creator<CoinModel> CREATOR = new Creator<CoinModel>() {
+        @Override
+        public CoinModel createFromParcel(Parcel in) {
+            return new CoinModel(in);
+        }
+
+        @Override
+        public CoinModel[] newArray(int size) {
+            return new CoinModel[size];
+        }
+    };
     @Nullable
     private final String symbol;
     @Nullable
@@ -21,7 +32,7 @@ public class CoinModel implements Parcelable {
     private final double currentPrice;
 
     public CoinModel(String symbol, String name, String imageUrl, double currentPrice) {
-        this.symbol = symbol;
+        this.symbol =  symbol;
         this.name = name;
         this.imageUrl = imageUrl;
         this.currentPrice = currentPrice;
@@ -33,18 +44,6 @@ public class CoinModel implements Parcelable {
         imageUrl = in.readString();
         currentPrice = in.readDouble();
     }
-
-    public static final Creator<CoinModel> CREATOR = new Creator<CoinModel>() {
-        @Override
-        public CoinModel createFromParcel(Parcel in) {
-            return new CoinModel(in);
-        }
-
-        @Override
-        public CoinModel[] newArray(int size) {
-            return new CoinModel[size];
-        }
-    };
 
     public String getSymbol() {
         return symbol;
