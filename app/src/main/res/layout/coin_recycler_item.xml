@@ -20,14 +20,14 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="10dp">
+                android:layout_margin="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="16dp">
 
                 <ImageView
                     android:id="@+id/coinImageView"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
 
             </androidx.cardview.widget.CardView>
 

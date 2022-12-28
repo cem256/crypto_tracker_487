@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.cemavci.project'
+    namespace 'com.avciuyguntopcu.project'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.cemavci.project"
+        applicationId "avciuyguntopcu.project"
         minSdk 30
         targetSdk 32
         versionCode 1
