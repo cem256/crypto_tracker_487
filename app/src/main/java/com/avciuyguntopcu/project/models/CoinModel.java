@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class CoinModel implements Parcelable {
 
+
     public static final Creator<CoinModel> CREATOR = new Creator<CoinModel>() {
         @Override
         public CoinModel createFromParcel(Parcel in) {
@@ -30,12 +31,18 @@ public class CoinModel implements Parcelable {
     @SerializedName("current_price")
     @Nullable
     private final double currentPrice;
+    @SerializedName("price_change_percentage_24h")
+    @Nullable
+    private final double percentageChange;
 
-    public CoinModel(String symbol, String name, String imageUrl, double currentPrice) {
+
+    public CoinModel(@Nullable String symbol, @Nullable String name, @Nullable String imageUrl, double currentPrice,
+                     double percentageChange) {
         this.symbol = symbol;
         this.name = name;
         this.imageUrl = imageUrl;
         this.currentPrice = currentPrice;
+        this.percentageChange = percentageChange;
     }
 
     protected CoinModel(Parcel in) {
@@ -43,16 +50,20 @@ public class CoinModel implements Parcelable {
         name = in.readString();
         imageUrl = in.readString();
         currentPrice = in.readDouble();
+        percentageChange = in.readDouble();
     }
 
+    @Nullable
     public String getSymbol() {
         return symbol;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
+    @Nullable
     public String getImageUrl() {
         return imageUrl;
     }
@@ -61,9 +72,8 @@ public class CoinModel implements Parcelable {
         return currentPrice;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public double getPercentageChange() {
+        return percentageChange;
     }
 
     @Override
@@ -72,5 +82,11 @@ public class CoinModel implements Parcelable {
         dest.writeString(name);
         dest.writeString(imageUrl);
         dest.writeDouble(currentPrice);
+        dest.writeDouble(percentageChange);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

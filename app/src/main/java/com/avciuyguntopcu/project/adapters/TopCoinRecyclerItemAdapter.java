@@ -54,6 +54,14 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
         holder.coinName.setText(coin.getName());
         holder.coinPrice.setText("$" + coin.getCurrentPrice());
         Picasso.get().load(coin.getImageUrl()).into(holder.coinImageView);
+        holder.percentageChange.setText("%" + String.format("%.2f", coin.getPercentageChange()));
+
+
+        if (coin.getPercentageChange() <= 0) {
+            holder.percentageChange.setTextColor(Color.RED);
+        } else {
+            holder.percentageChange.setTextColor(Color.GREEN);
+        }
 
 
         if (isFavorite(coin.getSymbol(), favoritesArrayList)) {
@@ -83,6 +91,8 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
                 return false;
             }
         });
+
+
     }
 
     private boolean isFavorite(String symbol, ArrayList<CoinModel> favoritesArrayList) {
@@ -106,6 +116,7 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
         ImageView coinImageView;
         TextView coinName;
         TextView coinPrice;
+        TextView percentageChange;
         ImageButton addFavoriteButton;
 
         public TopCoinRecyclerItemHolder(@NonNull View itemView) {
@@ -114,6 +125,7 @@ public class TopCoinRecyclerItemAdapter extends RecyclerView.Adapter<TopCoinRecy
             coinImageView = itemView.findViewById(R.id.coinImageView);
             coinName = itemView.findViewById(R.id.coinName);
             coinPrice = itemView.findViewById(R.id.coinPrice);
+            percentageChange = itemView.findViewById(R.id.percentageChange);
             addFavoriteButton = itemView.findViewById(R.id.addFavoriteButton);
         }
 

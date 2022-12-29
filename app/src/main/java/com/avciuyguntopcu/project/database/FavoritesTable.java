@@ -30,7 +30,8 @@ public class FavoritesTable {
             String name = cursor.getString(1);
             String imageUrl = cursor.getString(2);
             double currentPrice = Double.parseDouble(cursor.getString(3));
-            aCoin = new CoinModel(symbol, name, imageUrl, currentPrice);
+            double priceChange = -5;
+            aCoin = new CoinModel(symbol, name, imageUrl, currentPrice, priceChange);
             data.add(aCoin);
 
         }
