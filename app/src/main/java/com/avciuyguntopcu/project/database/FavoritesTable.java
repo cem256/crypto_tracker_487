@@ -15,9 +15,10 @@ public class FavoritesTable {
     public static String FIELD_NAME = "name";
     public static String FIELD_IMAGE_URL = "imageUrl";
     public static String FIELD_CURRENT_PRICE = "currentPrice";
+    public static String FIELD_PERCENTAGE_CHANGE = "percentageChange";
 
     public static String CREATE_TABLE_SQL =
-            "CREATE TABLE " + TABLE_NAME + " ( " + FIELD_SYMBOL + " text, " + FIELD_NAME + " text, " + FIELD_IMAGE_URL + " text, " + FIELD_CURRENT_PRICE + " text );";
+            "CREATE TABLE " + TABLE_NAME + " ( " + FIELD_SYMBOL + " text, " + FIELD_NAME + " text, " + FIELD_IMAGE_URL + " text, " + FIELD_CURRENT_PRICE + " text, " + FIELD_PERCENTAGE_CHANGE + " text );";
     public static String DROP_TABLE_SQL = "DROP TABLE if exists " + TABLE_NAME;
 
     public static ArrayList<CoinModel> getAllFavorites(DatabaseHelper dbHelper) {
@@ -30,8 +31,8 @@ public class FavoritesTable {
             String name = cursor.getString(1);
             String imageUrl = cursor.getString(2);
             double currentPrice = Double.parseDouble(cursor.getString(3));
-            double priceChange = -5;
-            aCoin = new CoinModel(symbol, name, imageUrl, currentPrice, priceChange);
+            double percentageChange = Double.parseDouble(cursor.getString(4));
+            aCoin = new CoinModel(symbol, name, imageUrl, currentPrice, percentageChange);
             data.add(aCoin);
 
         }
@@ -46,6 +47,7 @@ public class FavoritesTable {
         contentValues.put(FIELD_NAME, coin.getName());
         contentValues.put(FIELD_IMAGE_URL, coin.getImageUrl());
         contentValues.put(FIELD_CURRENT_PRICE, coin.getCurrentPrice());
+        contentValues.put(FIELD_PERCENTAGE_CHANGE, coin.getPercentageChange());
 
         boolean res = dbHelper.insert(TABLE_NAME, contentValues);
         return res;
